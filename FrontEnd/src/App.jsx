@@ -1,33 +1,9 @@
 import { useState, useEffect } from "react";
-import SignUp from "./views/SignUp.jsx";
+import { Link, Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar.jsx";
-import VideosPage from "./views/VideosPage.jsx";
-import Login from "./views/Login.jsx";
-import UploadVideo from "./views/UploadVideo.jsx";
-import VideoPlayer from "./views/VideoPlayer.jsx";
+import { icons, pages, routes } from "./PagesData.js";
 
 function App() {
-  const pages = [
-    "Home",
-    "Explore",
-    "Trending",
-    "Music",
-    "Subscribed",
-    "Upload",
-    "Login",
-    "Signup",
-  ];
-  const icons = [
-    "Home",
-    "Explore",
-    "Trending_Up",
-    "Headphones",
-    "Subscriptions",
-    "Upload",
-    "Login",
-    "Person_Add",
-  ];
-  const [Page, setPage] = useState("Signup");
   const [isSideBarOpen, setisSideBarOpen] = useState("");
   const [leftMarginForContentPage, setleftMarginForContentPage] =
     useState("ml-52");
@@ -49,30 +25,6 @@ function App() {
     toggleSideBar();
   });
 
-  function whatToDisplayOnContentPage() {
-    switch (Page) {
-      case "Signup":
-        return <SignUp prop={{ Page, setPage }} />;
-      case "Login":
-        return <Login prop={{ Page, setPage }} />;
-      case "Home":
-        return <VideosPage prop={{ Page, setPage }} />;
-      case "Explore":
-        return "Explore";
-      case "Trending":
-        return "Trending";
-      case "Music":
-        return "Music";
-      case "Subscribed":
-        return "Subscribed";
-      case "VideoPlayer":
-        return <VideoPlayer />;
-      case "Upload":
-        return <UploadVideo />;
-      default:
-        return "404";
-    }
-  }
   return (
     <>
       {/*Navbar///////////////////////////////////////////*/}
@@ -87,31 +39,29 @@ function App() {
         <div
           className={`bg-neutral-950 w-52 z-50 h-screen p-4 fixed ${isSideBarOpen}`}
         >
-          <div>
-            {pages.map((pageName, i, Names) => {
-              return (
-                <div key={i}>
-                  <div
-                    className="flex items-center hover:bg-neutral-800 rounded-lg p-1 pl-4 cursor-pointer"
-                    onClick={() => {
-                      toggleSideBar();
-                      setPage(pageName);
-                    }}
-                  >
-                    <span className="material-symbols-outlined mr-2">
-                      {icons[i]}
-                    </span>
-                    {pageName}
-                  </div>
-                  {i == 3 || i == 4 ? (
-                    <hr key={i + 100} className="my-2"></hr>
-                  ) : (
-                    ""
-                  )}
+          {pages.map((pageName, i, Names) => {
+            return (
+              <Link to={routes[i]} key={i}>
+                <div
+                  className="flex items-center hover:bg-neutral-800 rounded-lg p-1 pl-4 cursor-pointer"
+                  onClick={() => {
+                    toggleSideBar();
+                    pageName;
+                  }}
+                >
+                  <span className="material-symbols-outlined mr-2">
+                    {icons[i]}
+                  </span>
+                  {pageName}
                 </div>
-              );
-            })}
-          </div>
+                {i == 2 || i == 4 ? (
+                  <hr key={i + 100} className="my-2"></hr>
+                ) : (
+                  ""
+                )}
+              </Link>
+            );
+          })}
         </div>
 
         {/*Sidebar-------------------------------------------*/}
@@ -120,7 +70,7 @@ function App() {
         <div
           className={`${leftMarginForContentPage} w-full mx-auto justify-center flex items-center`}
         >
-          {whatToDisplayOnContentPage()}
+          {<Outlet />}
         </div>
 
         {/*Content Page -------------------------------------------*/}

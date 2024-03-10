@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const NavBar = ({
   isSideBarOpen,
@@ -10,7 +11,7 @@ const NavBar = ({
       <nav className="flex w-full justify-between items-center h-14 sticky top-0 z-50 bg-neutral-950">
         <div className="flex items-center">
           <button
-            className="w-12 h-8 m-2 text-2xl flex rounded-lg items-center border-2 border-transparent hover:border-gray-50"
+            className="w-12 h-8 m-2 text-2xl flex rounded-lg items-center border-2 border-transparent hover:border-red-600"
             onClick={() => {
               if (isSideBarOpen && window.innerWidth > 1000) {
                 setisSideBarOpen("");
@@ -23,9 +24,16 @@ const NavBar = ({
               }
             }}
           >
-            <span className="material-symbols-outlined mx-auto">menu</span>
+            <span className="material-symbols-outlined mx-auto text-red-600">
+              menu
+            </span>
           </button>
-          <h1 className="text-2xl max-md:hidden cursor-pointer">VideoApp</h1>
+          <Link
+            to={"/"}
+            className="text-2xl font-bold max-md:hidden cursor-pointer"
+          >
+            VideoApp
+          </Link>
         </div>
         <div>
           <input

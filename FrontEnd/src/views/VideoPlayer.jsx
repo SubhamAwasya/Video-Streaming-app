@@ -1,7 +1,6 @@
 import React from "react";
 import Video from "../components/Video.jsx";
 import Comment from "../components/Comment.jsx";
-import VideosPage from "./VideosPage.jsx";
 import { useEffect } from "react";
 
 const VideoPlayer = () => {
