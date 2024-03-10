@@ -1,32 +1,30 @@
 import React from "react";
 import Video from "../components/Video";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./css/videos_page.css";
-import { useEffect } from "react";
 
 const HomePage = ({ prop }) => {
-  console.log(useParams());
+  const [videosData, setVideosData] = useState([]);
+
+  async function fetchData() {
+    try {
+      const response = await fetch("http://localhost:3001/Videos");
+      const data = await response.json();
+      setVideosData(data); // Update the state with the fetched data
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="video-page-container">
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
+      {videosData.map((video, i) => {
+        return <Video key={i} props={video} />;
+      })}
     </div>
   );
 };

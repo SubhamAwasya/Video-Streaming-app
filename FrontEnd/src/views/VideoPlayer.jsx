@@ -1,35 +1,69 @@
 import React from "react";
 import Video from "../components/Video.jsx";
 import Comment from "../components/Comment.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const VideoPlayer = () => {
+  const videoID = useParams();
+  const [videoData, setVideoData] = useState({});
+  const [userData, setUserData] = useState({});
+  const [relatedVidos, setRelatedVidos] = useState([]);
+
+  async function fetchVideoAndUserData() {
+    //fetching video data based on params
+    const videoResponse = await fetch(
+      `http://localhost:3001/Videos/${videoID.id}`
+    );
+
+    const data = await videoResponse.json();
+    //fetching user data based on video
+    const userResponse = await fetch(
+      `http://localhost:3001/Users/${data.user}`
+    );
+    //setting video and use data
+    setVideoData(data);
+    setUserData(await userResponse.json());
+  }
+
+  //fetch related videos to suggest next videos in the right side
+  async function fetchRelatedVideos() {
+    const response = await fetch("http://localhost:3001/Videos");
+    const data = await response.json();
+    setRelatedVidos(data); // Update the state with the fetched data
+  }
+
   useEffect(() => {
     window.scrollTo(0, -1);
-  }, []);
+    fetchVideoAndUserData();
+    fetchRelatedVideos();
+  }, [useParams()]);
 
-  const text =
-    "Video Title that how to do css grid in this video  how to do css grid in this Title that how to do css grid in this video  how to do css grid in this";
   return (
     <div className="flex m-8 items-start">
       <div className="">
         {/*Video Tage is hear*/}
         <video
           className="-z-10 w-full max-w-6xl rounded-lg"
-          src="onepice.mkv"
+          src={videoData.video}
           autoPlay
           controls
         ></video>
         <div className="-z-10 w-full max-w-6xl rounded-lg p-2 h-16">
-          <div className="text-2xl mb-2">{text}</div>
+          {/*title */}
+          <div className="text-2xl mb-2">{videoData.title}</div>
           <div className="justify-between flex video_player-detail">
             <div className="flex items-center">
+              {/*User profile img*/}
               <img
-                src="DefaultProfile.png"
+                src={userData.profile}
                 className="ml-2 w-10 h-10 rounded-full"
               ></img>
               <div style={{ margin: "5px" }}>
-                <div className="video_player-channel_name">mr beast</div>
+                {/*user / channer name*/}
+                <div className="video_player-channel_name">
+                  {userData.userName}
+                </div>
                 <div className="text-sm">Like 25k . 1 houre ago</div>
               </div>
             </div>
@@ -62,13 +96,10 @@ const VideoPlayer = () => {
         </div>
       </div>
       {/*right video sudgestion*/}
-      <div className="flex-col ml-8 w-full max-w-60 max-lg:hidden">
-        <Video />
-        <Video />
-        <Video />
-        <Video />
-        <Video />
-        <Video />
+      <div className="flex-col ml-8 w-full max-w-64 max-lg:hidden">
+        {relatedVidos.map((video, i) => {
+          return <Video key={i} props={video} />;
+        })}
       </div>
     </div>
   );
