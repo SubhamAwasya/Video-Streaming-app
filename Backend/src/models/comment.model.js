@@ -6,13 +6,14 @@ const commentSchema = new Schema({
     required: true,
   },
   commentBy: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   commentTo: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Video",
     required: true,
-    default: 0,
   },
 });
 
