@@ -8,7 +8,7 @@ const NavBar = ({
 }) => {
   return (
     <>
-      <nav className="flex w-full justify-between items-center h-14 sticky top-0 z-50 bg-neutral-950">
+      <nav className="flex w-full justify-between items-center h-14 fixed top-0 z-50 bg-neutral-950">
         <div className="flex items-center">
           <button
             className="w-12 h-8 m-2 text-2xl flex rounded-lg items-center border-2 border-transparent hover:border-red-600"

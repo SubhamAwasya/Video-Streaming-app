@@ -37,7 +37,7 @@ function App() {
       <div className="flex">
         {/*Sidebar///////////////////////////////////////////*/}
         <div
-          className={`bg-neutral-950 w-52 z-50 h-screen p-4 fixed ${isSideBarOpen}`}
+          className={`bg-neutral-950 w-52 z-50 h-screen mt-14 p-4 fixed ${isSideBarOpen}`}
         >
           {pages.map((pageName, i, Names) => {
             return (
@@ -68,7 +68,7 @@ function App() {
         {/*Content Page ///////////////////////////////////////////*/}
 
         <div
-          className={`${leftMarginForContentPage} w-full mx-auto justify-center flex items-center`}
+          className={`${leftMarginForContentPage} w-full mx-auto justify-center mt-14 flex items-center`}
         >
           {<Outlet />}
         </div>
