@@ -26,27 +26,24 @@ function App() {
       return "";
     }
     return (
-      <>
-        <>
-          <NavLink
-            to={routes[i]}
-            key={i}
-            className={({ isActive }) =>
-              isActive
-                ? "bg-red-700  flex items-cente rounded-lg p-1 pl-4 cursor-pointer"
-                : "flex items-center hover:bg-neutral-800 rounded-lg p-1 pl-4 cursor-pointer"
-            }
-            onClick={() => {
-              toggleSideBar();
-              pageName;
-            }}
-          >
-            <span className="material-symbols-outlined mr-2">{icons[i]}</span>
-            {pageName}
-          </NavLink>
-          {i == 2 || i == 4 ? <hr key={i + 100} className="my-2"></hr> : ""}
-        </>
-      </>
+      <div key={i}>
+        <NavLink
+          to={routes[i]}
+          className={({ isActive }) =>
+            isActive
+              ? "bg-red-700  flex items-cente rounded-lg p-1 pl-4 cursor-pointer"
+              : "flex items-center hover:bg-neutral-800 rounded-lg p-1 pl-4 cursor-pointer"
+          }
+          onClick={() => {
+            toggleSideBar();
+            pageName;
+          }}
+        >
+          <span className="material-symbols-outlined mr-2">{icons[i]}</span>
+          {pageName}
+        </NavLink>
+        {i == 2 || i == 4 ? <hr key={i + 100} className="my-2"></hr> : ""}
+      </div>
     );
   }
 

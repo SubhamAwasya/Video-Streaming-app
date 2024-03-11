@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../context/user-context.jsx";
 
 const NavBar = ({
   isSideBarOpen,
   setisSideBarOpen,
   setleftMarginForContentPage,
 }) => {
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {}, []);
+
   return (
     <>
       <nav className="flex w-full justify-between items-center h-14 fixed top-0 z-50 bg-neutral-950">
@@ -35,14 +40,25 @@ const NavBar = ({
             VideoApp
           </Link>
         </div>
+        {/*Search input */}
         <div>
           <input
             className="w-96 p-1 pl-4 rounded-full max-lg:w-60 bg-neutral-900"
             placeholder="Search Videos"
           ></input>
         </div>
-        <div className="flex items-center max-lg:w-auto">
-          <img className="w-8 m-1 rounded-full" src="DefaultProfile.png"></img>
+        {/*User details*/}
+
+        <div className="items-center px-2 max-lg:w-auto">
+          <Link to={"/profile"} className="flex items-center">
+            <span className="hover:underline">
+              {user ? user.username : "Name"}
+            </span>
+            <img
+              className="w-8 h-8 m-1 rounded-full"
+              src={user ? `${user.profile}` : "DefaultProfile.png"}
+            ></img>
+          </Link>
         </div>
       </nav>
     </>

@@ -9,6 +9,7 @@ import Login from "./views/Login.jsx";
 import SignUp from "./views/SignUp.jsx";
 import UploadVideo from "./views/UploadVideo.jsx";
 import VideoPlayer from "./views/VideoPlayer.jsx";
+import Profile from "./views/Profile.jsx";
 import Error404 from "./views/Error404.jsx";
 
 const router = createBrowserRouter([
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "signup", element: <SignUp /> },
       { path: "upload", element: <UploadVideo /> },
+      { path: "profile", element: <Profile /> },
       { path: "play/:id", element: <VideoPlayer /> },
     ],
   },

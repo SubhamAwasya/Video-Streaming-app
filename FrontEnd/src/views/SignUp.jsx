@@ -1,9 +1,16 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function SignUp({ prop }) {
   const rout = "http://localhost:9999/api/users/register";
   const [avatar, setavatar] = useState("DefaultProfile.png");
   const [imgFile, setimgFile] = useState(null);
+
+  // this is for UI perpose so user know that Wait for server response
+  const [waitingForRes, setWaitingForRes] = useState(false);
+
+  // use to store disply message
+  const [message, setMessage] = useState("");
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -13,24 +20,31 @@ function SignUp({ prop }) {
 
   async function formSubmitHandler(e) {
     e.preventDefault();
-    const formData = new FormData();
+    setWaitingForRes(true);
+    setMessage("");
+    let formData = new FormData();
     formData.append("fname", e.target.fname.value);
     formData.append("lname", e.target.lname.value);
     formData.append("username", e.target.username.value);
     formData.append("email", e.target.email.value);
     formData.append("password", e.target.password.value);
     formData.append("profile", imgFile);
+    //Sending data to server
     fetch(rout, {
       method: "POST",
       body: formData,
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        setMessage(res.message);
+        setWaitingForRes(false);
+        formData = new FormData();
       })
       .catch((error) => {
         // Handle any errors that occur during the fetch
-        console.error("Error:", error);
+        setMessage(error);
+        setWaitingForRes(false);
+        formData = new FormData();
       });
   }
   return (
@@ -45,7 +59,7 @@ function SignUp({ prop }) {
         }}
       >
         <img
-          className="rounded-full w-24 mx-auto"
+          className="rounded-full w-24 h-24 mx-auto"
           id="preview"
           src={avatar}
           alt="Image preview"
@@ -104,14 +118,39 @@ function SignUp({ prop }) {
           autoComplete=""
           required
         ></input>
-        <div className="form-group_buttons">
-          <button
-            className="bg-transparent hover:bg-neutral-700 border-2 border-neutral-500 hover:border-neutral-300 p-2 w-32 m-4 rounded-md"
-            type="submit"
-            id="submit"
-          >
-            SignUp
-          </button>
+        <div className="flex flex-col items-center form-group_buttons">
+          {/*Sign Up Button*/}
+          {!waitingForRes ? (
+            <button
+              className="bg-transparent hover:bg-neutral-700 border-2 border-neutral-500 hover:border-neutral-300 p-2 w-32 m-4 rounded-md"
+              type="submit"
+              id="submit"
+            >
+              SignUp
+            </button>
+          ) : (
+            ""
+          )}
+          {!waitingForRes ? (
+            <span className="opacity-60">
+              Already have account&nbsp;
+              <Link to={"/login"}>
+                <span className="text-blue-500 underline opacity-100">
+                  Login
+                </span>
+              </Link>
+            </span>
+          ) : (
+            ""
+          )}
+          {/*Waiting response message*/}
+          {waitingForRes ? (
+            <div className="mt-8">waiting For Response...!</div>
+          ) : (
+            ""
+          )}
+          {/*Message recived from server*/}
+          {message ? <div className="mt-4">{message}</div> : ""}
         </div>
       </form>
     </>

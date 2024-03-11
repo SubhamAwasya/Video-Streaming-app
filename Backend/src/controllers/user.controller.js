@@ -29,11 +29,12 @@ const registerUser = asyncHandler(async (req, res) => {
   //checking that user is already registerd on database
   const existedUser = await User.findOne({ email });
   if (existedUser) {
+    res.status(409).send({ message: "You Already registerd" });
     throw new ApiError(409, "User with email already exists");
   }
 
   //encrypting password
-  const encryptedPassword = await bcrypt.hash(password, 10);
+  const encryptedPassword = await bcrypt.hash(password, 2);
 
   //getting profile image path by multer middleware
   let profileLocalPath;
@@ -69,7 +70,9 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while registering the user");
   }
   //response send back to user of frontend
-  res.send(JSON.stringify(createdUser));
+  res
+    .status(200)
+    .send(JSON.stringify({ ...createdUser, message: "Sucessfull Registerd." }));
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -78,6 +81,7 @@ const loginUser = asyncHandler(async (req, res) => {
   //serching for use in database
   const recivedUser = await User.findOne({ email });
   if (!recivedUser) {
+    res.status(404).send({ message: "Email is not registerd" });
     throw new ApiError(404, "user not found you are not registerd");
   }
 
@@ -88,6 +92,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   if (!isPasswordCorrect) {
+    res.send({ message: "Incorrect Password" });
     throw new ApiError(404, "Incorrect Password");
   }
 
@@ -110,6 +115,7 @@ const loginUser = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json({
       user: loggedInUser,
+      message: "Succefully LogedIn",
       accessToken,
       refreshToken,
     });

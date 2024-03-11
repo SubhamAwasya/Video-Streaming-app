@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../../context/user-context.jsx";
+import { Link, json } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const rout = "http://localhost:9999/api/users/login";
+  const { user, logIn } = useContext(UserContext);
+  // const [isSideBarOpen, setisSideBarOpen] = useState("");
+  // this is for UI perpose so user know that Wait for server response
+  const [waitingForRes, setWaitingForRes] = useState(false);
+  // use to store disply message
+  const [message, setMessage] = useState("");
+
+  // Creating navigate object
+  const navigate = useNavigate();
 
   async function formSubmitHandler(e) {
     e.preventDefault();
+    setMessage("");
+    setWaitingForRes(true);
     fetch(rout, {
       method: "post",
       headers: {
@@ -15,15 +29,24 @@ function Login() {
         password: e.target.password.value,
       }),
     })
-      .then(async (response) => {
+      .then((res) => res.json())
+      .then((res) => {
         // Handle the response from the server
-        const jsonData = await response.json();
-        console.log("recived data", jsonData);
+        logIn(res.user);
+        setMessage(res.message);
+        return res;
+      })
+      .then((res) => {
+        console.log(res);
+        // After loged in this redirect to home page
+        if (res.refreshToken) navigate("/");
       })
       .catch((error) => {
         // Handle any errors that occur during the fetch
+        setMessage(error);
         console.error("Error:", error);
       });
+    setWaitingForRes(false);
   }
   return (
     <>
@@ -31,7 +54,7 @@ function Login() {
         id="myForm"
         method="post"
         encType="multipart/form-data"
-        className="flex-col justify-center text-center items-center w-96 max-sm:w-80 bg-neutral-800 p-8 m-8 rounded-xl"
+        className="flex flex-col justify-center text-center items-center w-96 max-sm:w-80 bg-neutral-800 p-8 m-8 rounded-xl"
         onSubmit={(e) => {
           formSubmitHandler(e);
         }}
@@ -62,11 +85,20 @@ function Login() {
         >
           Login
         </button>
-
-        <div className="infoText">
-          If you do not have account you can create by clicking on register
-          button
-        </div>
+        <span className="opacity-60">
+          No account ? you can &nbsp;
+          <Link to={"/signup"}>
+            <span className="text-blue-500 underline opacity-100">SigUp</span>
+          </Link>
+        </span>
+        {/*Waiting response message*/}
+        {waitingForRes ? (
+          <div className="mt-8">waiting For Response...!</div>
+        ) : (
+          ""
+        )}
+        {/*Message recived from server*/}
+        {message ? <div className="mt-4">{message}</div> : ""}
       </form>
     </>
   );
