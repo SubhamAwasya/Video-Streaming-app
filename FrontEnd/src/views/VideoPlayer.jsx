@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 const VideoPlayer = () => {
   const videoID = useParams().id;
+  const [text, setText] = useState("");
   const [videoData, setVideoData] = useState({});
   const [userData, setUserData] = useState({});
   const [comments, setComments] = useState([]);
@@ -41,10 +42,19 @@ const VideoPlayer = () => {
     setRelatedVidos(data); // Update the state with the fetched data
   }
 
+  // resizing textarea based on text present in text box
+  const AutoResizingTextarea = (event) => {
+    const textarea = event.target;
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+
   useEffect(() => {
     window.scrollTo(0, -1);
+    //calling function to fetch data
     fetchVideoAndUserData();
     fetchRelatedVideos();
+    // video play from start
     const VP = document.getElementById("videoPlayer");
     addEventListener("DOMContentLoaded", () => {
       VP.currentTime = 0;
@@ -73,7 +83,7 @@ const VideoPlayer = () => {
                 src={userData.profile}
                 className="ml-2 w-16 h-16 aspect-square rounded-full"
               ></img>
-              <div style={{ margin: "5px" }}>
+              <div className="ml-2">
                 {/*user / channer name*/}
                 <div className="video_player-channel_name font-bold">
                   {userData.userName}
@@ -86,25 +96,36 @@ const VideoPlayer = () => {
               </div>
             </div>
             <div className="flex max-sm:flex-col">
-              <button className="flex items-center justify-center h-fit p-1 m-1 rounded-lg border-2 border-neutral-400 hover:border-neutral-600 text-xs ">
-                <span className="material-symbols-outlined pr-2">thumb_up</span>
+              <button className="flex items-center justify-center h-[2rem] py-1 px-2 mx-1 rounded-lg border-2 border-neutral-400 hover:border-neutral-600 hover:text-neutral-600 text-xs ">
+                <span className="material-symbols-outlined pr-1 scale-[0.8]">
+                  thumb_up
+                </span>
                 {videoData.likes}
               </button>
-              <button className="flex items-center justify-center h-fit p-1 m-1 rounded-lg border-2 border-neutral-400 hover:border-neutral-600 text-xs ">
-                <span className="material-symbols-outlined pr-2">
-                  thumb_down
-                </span>
-                Dislike
-              </button>
-              <button className="flex items-center justify-center h-fit p-1 m-1 rounded-lg border-2 border-neutral-400 hover:border-neutral-600 text-xs ">
-                <span className="material-symbols-outlined pr-2">share</span>
+              <button className="flex items-center justify-center h-[2rem] py-1 px-2 ml-1 rounded-lg border-2 border-neutral-400 hover:border-neutral-600 hover:text-neutral-600 text-xs ">
                 Subscribe
               </button>
             </div>
           </div>
           <hr className="m-4"></hr>
-          {/*Comments*/}
+
+          {/*input comments*/}
+          <div className="flex flex-col items-end">
+            <textarea
+              id="autoresize"
+              maxLength="200"
+              placeholder="Add comment :"
+              onChange={(e) => setText(e.target.value)}
+              onInput={AutoResizingTextarea}
+              className="w-full resize-none overflow-hidden rounded-lg p-2 text-sm outline-none"
+            />
+            <button className="flex items-center justify-center h-[2rem] py-1 px-2 mt-2 rounded-lg border-2 border-neutral-400 hover:border-neutral-600 hover:text-neutral-600 text-xs ">
+              Comment
+            </button>
+          </div>
+          {/*comments*/}
           <div className="video_comments_container">
+            <span className="text-lg font-extrabold">Comments :</span>
             <span className="text-lg font-extrabold">Comments :</span>
             {comments.map((element, i) => {
               return <Comment key={i} props={element} />;
