@@ -141,6 +141,25 @@ const logOut = asyncHandler(async (req, res) => {
     .send({ message: "Loged oute succesfully" });
 });
 
+const logInWithAccessToken = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select(
+    "-password -refreshToken"
+  );
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    user._id
+  );
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json({
+      user,
+      message: "Succefully LogedIn with token",
+      accessToken,
+      refreshToken,
+    });
+});
+
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken = req?.cookies?.refreshToken;
 
@@ -187,4 +206,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, loginUser, refreshAccessToken, logOut };
+export {
+  registerUser,
+  loginUser,
+  refreshAccessToken,
+  logOut,
+  logInWithAccessToken,
+};

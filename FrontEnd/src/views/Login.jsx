@@ -37,7 +37,6 @@ function Login() {
         return res;
       })
       .then((res) => {
-        console.log(res);
         // After loged in this redirect to home page
         if (res.refreshToken) navigate("/");
       })

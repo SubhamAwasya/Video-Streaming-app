@@ -50,7 +50,10 @@ const NavBar = ({
         {/*User details*/}
 
         <div className="items-center px-2 max-lg:w-auto">
-          <Link to={"/profile"} className="flex items-center">
+          <Link
+            to={user ? "/profile" : "/profile"}
+            className="flex items-center"
+          >
             <span className="hover:underline">
               {user ? user.username : "Name"}
             </span>
