@@ -4,6 +4,8 @@ import NavBar from "./components/NavBar.jsx";
 import { icons, pages, routes } from "./PagesData.js";
 import { UserContext } from "../context/user-context.jsx";
 
+const rout = "http://localhost:9999/api/users/loginWithToken";
+
 function App() {
   //user context
   const { user, logIn, logOut } = useContext(UserContext);
@@ -47,8 +49,25 @@ function App() {
     );
   }
 
+  // log in with access token
+  function logInWithAccessToken() {
+    fetch(rout, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        logIn(res);
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the fetch
+        console.log(error);
+      });
+  }
   useEffect(() => {
     toggleSideBar();
+    logInWithAccessToken();
   }, []);
   //Side bar hide and show by window resize
   window.addEventListener("resize", function () {

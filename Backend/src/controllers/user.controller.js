@@ -121,7 +121,25 @@ const loginUser = asyncHandler(async (req, res) => {
     });
 });
 
-const logOut = asyncHandler(async (req, res) => {});
+const logOut = asyncHandler(async (req, res) => {
+  const testtemp = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        refreshToken: null,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  console.log(testtemp);
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .send({ message: "Loged oute succesfully" });
+});
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken = req?.cookies?.refreshToken;
