@@ -3,9 +3,15 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/apiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import jwt from "jsonwebtoken";
+
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 /////////////////////////HelperFunctions///////////////////////////
-const generateAccessAndRefereshTokens = async (userId) => {
+const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
     const accessToken = user.generateAccessToken();
@@ -77,7 +83,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log("/////////////////", email, password);
   //serching for use in database
   const recivedUser = await User.findOne({ email });
   if (!recivedUser) {
@@ -96,18 +101,13 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Incorrect Password");
   }
 
-  const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     recivedUser._id
   );
 
   const loggedInUser = await User.findById(recivedUser._id).select(
     "-password -refreshToken"
   );
-
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
 
   return res
     .status(200)
@@ -120,4 +120,53 @@ const loginUser = asyncHandler(async (req, res) => {
       refreshToken,
     });
 });
-export { registerUser, loginUser };
+
+const logOut = asyncHandler(async (req, res) => {});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const incomingRefreshToken = req?.cookies?.refreshToken;
+
+  try {
+    if (!incomingRefreshToken) {
+      res.send({ message: "No refresh token" });
+      return new ApiError(404, "No refresh token");
+    }
+
+    const decodedToken = await jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decodedToken._id).select("-password");
+
+    if (!user) {
+      res.send({ message: "In valid refresh token" });
+      return new ApiError(404, "In valid refresh token");
+    }
+
+    if (incomingRefreshToken !== user?.refreshToken) {
+      res.send({ message: "Token is expired or used" });
+      return new ApiError(404, "Token is expired or used");
+    }
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        user,
+        message: "Toke refreshed",
+        accessToken,
+        refreshToken,
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Someting went wrong!" });
+  }
+});
+
+export { registerUser, loginUser, refreshAccessToken, logOut };
