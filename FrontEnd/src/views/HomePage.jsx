@@ -8,7 +8,9 @@ const HomePage = ({ prop }) => {
 
   async function fetchData() {
     try {
-      const response = await fetch("http://localhost:3001/Videos");
+      const response = await fetch(
+        "http://localhost:9999/api/videos/get-home-videos"
+      );
       const data = await response.json();
       setVideosData(data); // Update the state with the fetched data
     } catch (error) {

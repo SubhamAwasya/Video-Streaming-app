@@ -1,15 +1,10 @@
 import express from "express";
-import router from "./routes/routes.js";
+import { userRouter, videoRouter, commentRouter } from "./routes/routes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Replace '*' with the exact origin
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -25,6 +20,8 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
-app.use("/api/users", router);
+app.use("/api/users", userRouter);
+app.use("/api/videos", videoRouter);
+app.use("/api/comments", commentRouter);
 
 export default app;

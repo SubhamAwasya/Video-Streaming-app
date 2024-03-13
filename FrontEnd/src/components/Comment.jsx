@@ -5,7 +5,7 @@ const Comment = ({ props }) => {
   async function fetchCommentBy() {
     //fetching that who comment in this video
     const commentByResponse = await fetch(
-      `http://localhost:3001/Users/${props.commentBy}`
+      `http://localhost:9999/api/users/get-users-by-id?id=${props.commentBy}`
     );
     const tempCommentByData = await commentByResponse.json();
     setcommentBy(tempCommentByData);

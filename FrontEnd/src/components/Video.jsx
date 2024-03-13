@@ -7,9 +7,8 @@ const Video = ({ props }) => {
 
   async function fetchUserData() {
     try {
-      //fetching user data based on video
       const userResponse = await fetch(
-        `http://localhost:3001/Users/${props.user}`
+        `http://localhost:9999/api/users/get-users-by-id?id=${props.user}`
       );
       setUserData(await userResponse.json());
     } catch (error) {
@@ -24,7 +23,7 @@ const Video = ({ props }) => {
 
   return (
     <>
-      <Link to={`/play/${props.id}`} className="mb-4">
+      <Link to={`/play/${props._id}`} className="mb-4">
         <div className="hover:bg-zinc-800 p-1 rounded-lg">
           {/*Thumbnail img */}
           <img

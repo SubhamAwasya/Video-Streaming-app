@@ -206,10 +206,22 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsersById = asyncHandler(async (req, res) => {
+  const user_id = req.query.id;
+  const user = await User.findById(user_id);
+  res.send(user);
+  try {
+  } catch (error) {
+    console.log("Error from User.controller : getUserById :=" + error);
+    res.send(error);
+  }
+});
+
 export {
   registerUser,
   loginUser,
   refreshAccessToken,
   logOut,
   logInWithAccessToken,
+  getUsersById,
 };

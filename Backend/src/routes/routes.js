@@ -6,12 +6,18 @@ import {
   refreshAccessToken,
   logOut,
   logInWithAccessToken,
+  getUsersById,
 } from "../controllers/user.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
+import { getVideos, getVideoById } from "../controllers/video.controller.js";
+import { getComment } from "../controllers/comment.controllers.js";
 
-const router = Router();
+const userRouter = Router();
+const videoRouter = Router();
+const commentRouter = Router();
 
-router.route("/register").post(
+//User Routes
+userRouter.route("/register").post(
   upload.fields([
     {
       name: "profile",
@@ -20,12 +26,18 @@ router.route("/register").post(
   ]),
   registerUser
 );
+userRouter.route("/get-users-by-id").get(getUsersById);
+userRouter.route("/login").post(loginUser);
+userRouter.route("/refreshAccessToken").post(refreshAccessToken);
+// Protected rout User Routes
+userRouter.route("/logout").post(verifyJwt, logOut);
+userRouter.route("/tokenlogin").post(verifyJwt, logInWithAccessToken);
 
-router.route("/login").post(loginUser);
-router.route("/refreshAccessToken").post(refreshAccessToken);
+//Video Routes
+videoRouter.route("/get-home-videos").get(getVideos);
+videoRouter.route("/get-video-by-id").get(getVideoById);
 
-// protected rout
-router.route("/logout").post(verifyJwt, logOut);
-router.route("/tokenlogin").post(verifyJwt, logInWithAccessToken);
+//Comments Routes
+commentRouter.route("/get-comments").get(getComment);
 
-export default router;
+export { userRouter, videoRouter, commentRouter };

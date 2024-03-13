@@ -23,14 +23,14 @@ const Profile = () => {
           type="text"
           name="username"
           value={user ? user.username : "UserName"}
-          onChange={"handleChange"}
+          onChange={() => {}}
           className="text-white w-full text-center p-2 m-1 rounded-md"
         />
         <input
           type="email"
           name="email"
           value={user ? user.email : "Email"}
-          onChange={"handleChange"}
+          onChange={() => {}}
           className="text-white w-full text-center p-2 m-1 rounded-md"
         />
         <button

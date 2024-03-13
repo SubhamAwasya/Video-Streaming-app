@@ -15,29 +15,36 @@ const VideoPlayer = () => {
   async function fetchVideoAndUserData() {
     //fetching video data based on params
     const videoResponse = await fetch(
-      `http://localhost:3001/Videos/${videoID}`
+      `http://localhost:9999/api/videos/get-video-by-id?id=${videoID}`
     );
 
     const tempVideoData = await videoResponse.json();
     //fetching user data based on video
     const userResponse = await fetch(
-      `http://localhost:3001/Users/${tempVideoData.user}`
+      `http://localhost:9999/api/users/get-users-by-id?id=${tempVideoData.user}`
     );
     const tempUserData = await userResponse.json();
     //fetching comments data based on video
+    // ---------------------------------------------------
     const commentResponse = await fetch(
-      `http://localhost:3001/Comments?commentTo=${videoID}`
+      `http://localhost:9999/api/comments/get-comments?comment_to=${videoID}`
     );
     const tempCommentData = await commentResponse.json();
+    // ---------------------------------------------------
+
     //setting data of videos, users and comments
     setVideoData(tempVideoData);
     setUserData(tempUserData);
+    // ---------------------------------------------------
     setComments(tempCommentData);
+    // ---------------------------------------------------
   }
 
   //fetch related videos to suggest next videos in the right side
   async function fetchRelatedVideos() {
-    const response = await fetch("http://localhost:3001/Videos");
+    const response = await fetch(
+      "http://localhost:9999/api/videos/get-home-videos"
+    );
     const data = await response.json();
     setRelatedVidos(data); // Update the state with the fetched data
   }
@@ -63,7 +70,7 @@ const VideoPlayer = () => {
   }, [useParams(), videoData.id, userData.user]);
 
   return (
-    <div className="flex m-8 items-start">
+    <div className="flex mx-20 max-sm:mx-4 max-md:mx-10 my-4 ">
       <div className="">
         {/*Video Tage is hear*/}
         <video
@@ -134,7 +141,7 @@ const VideoPlayer = () => {
         </div>
       </div>
       {/*right video sudgestion*/}
-      <div className="flex-col ml-8 w-full max-w-64 max-lg:hidden h-screen">
+      <div className="flex-col w-full max-w-96 max-lg:hidden px-10 h-screen">
         {relatedVidos.map((video, i) => {
           return <Video key={i} props={video} />;
         })}
