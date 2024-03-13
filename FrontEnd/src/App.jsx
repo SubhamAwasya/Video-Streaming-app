@@ -48,11 +48,10 @@ function App() {
       </div>
     );
   }
-  
+
   // log in with access token
   useEffect(() => {
     toggleSideBar();
-
   }, []);
   //Side bar hide and show by window resize
   window.addEventListener("resize", function () {

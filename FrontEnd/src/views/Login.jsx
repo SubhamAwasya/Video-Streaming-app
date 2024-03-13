@@ -87,7 +87,7 @@ function Login() {
         <span className="opacity-60">
           No account ? you can &nbsp;
           <Link to={"/signup"}>
-            <span className="text-blue-500 underline opacity-100">SigUp</span>
+            <span className="text-blue-500  underline opacity-100">SigUp</span>
           </Link>
         </span>
         {/*Waiting response message*/}

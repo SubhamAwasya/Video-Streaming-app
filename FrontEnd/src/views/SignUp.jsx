@@ -6,11 +6,10 @@ function SignUp({ prop }) {
   const [avatar, setavatar] = useState("DefaultProfile.png");
   const [imgFile, setimgFile] = useState(null);
 
-  // this is for UI perpose so user know that Wait for server response
-  const [waitingForRes, setWaitingForRes] = useState(false);
-
   // use to store disply message
   const [message, setMessage] = useState("");
+
+  const [loadingAnimatino, setLoadingAnimatino] = useState(false);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -19,9 +18,10 @@ function SignUp({ prop }) {
   };
 
   async function formSubmitHandler(e) {
+    setLoadingAnimatino(true);
     e.preventDefault();
-    setWaitingForRes(true);
     setMessage("");
+
     let formData = new FormData();
     formData.append("fname", e.target.fname.value);
     formData.append("lname", e.target.lname.value);
@@ -37,13 +37,14 @@ function SignUp({ prop }) {
       .then((res) => res.json())
       .then((res) => {
         setMessage(res.message);
-        setWaitingForRes(false);
         formData = new FormData();
+        setLoadingAnimatino(false);
       })
       .catch((error) => {
         // Handle any errors that occur during the fetch
+        setLoadingAnimatino(false);
         setMessage(error);
-        setWaitingForRes(false);
+
         formData = new FormData();
       });
   }
@@ -120,7 +121,7 @@ function SignUp({ prop }) {
         ></input>
         <div className="flex flex-col items-center form-group_buttons">
           {/*Sign Up Button*/}
-          {!waitingForRes ? (
+          {!loadingAnimatino ? (
             <button
               className="bg-transparent hover:bg-neutral-700 border-2 border-neutral-500 hover:border-neutral-300 p-2 w-32 m-4 rounded-md"
               type="submit"
@@ -131,7 +132,7 @@ function SignUp({ prop }) {
           ) : (
             ""
           )}
-          {!waitingForRes ? (
+          {!loadingAnimatino ? (
             <span className="opacity-60">
               Already have account&nbsp;
               <Link to={"/login"}>
@@ -144,10 +145,14 @@ function SignUp({ prop }) {
             ""
           )}
           {/*Waiting response message*/}
-          {waitingForRes ? (
-            <div className="mt-8">waiting For Response...!</div>
-          ) : (
-            ""
+          {!loadingAnimatino || (
+            <div className="mt-[3rem] loader text-5xl">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
           )}
           {/*Message recived from server*/}
           {message ? <div className="mt-4">{message}</div> : ""}

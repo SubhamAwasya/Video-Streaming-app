@@ -35,6 +35,11 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    subscribers: [
+      {
+        video: { type: mongoose.Schema.Types.ObjectId, ref: "Video" },
+      },
+    ],
     videos: [
       {
         video: { type: mongoose.Schema.Types.ObjectId, ref: "Video" },

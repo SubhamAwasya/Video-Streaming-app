@@ -19,11 +19,12 @@ const Comment = ({ props }) => {
         {/* user profile who comment in this video */}
         <img src={commentBy.profile} className="w-10 h-10 rounded-full"></img>
         <div className="m-2">
-          <div className="">{commentBy.userName}</div>
+          <div className="">{commentBy.username}</div>
         </div>
       </div>
+      <hr className="opacity-50 mt-2"></hr>
       {/* actual comment */}
-      <div className="text-base">{props.comment}</div>
+      <div className="text-zinc-400 opacity-80 text-sm">: {props.comment}</div>
     </div>
   );
 };

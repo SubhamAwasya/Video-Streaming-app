@@ -10,7 +10,10 @@ import {
 } from "../controllers/user.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 import { getVideos, getVideoById } from "../controllers/video.controller.js";
-import { getComment } from "../controllers/comment.controllers.js";
+import {
+  createNewComment,
+  getComment,
+} from "../controllers/comment.controllers.js";
 
 const userRouter = Router();
 const videoRouter = Router();
@@ -39,5 +42,6 @@ videoRouter.route("/get-video-by-id").get(getVideoById);
 
 //Comments Routes
 commentRouter.route("/get-comments").get(getComment);
+commentRouter.route("/create-new-comment").post(createNewComment);
 
 export { userRouter, videoRouter, commentRouter };
