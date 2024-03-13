@@ -34,7 +34,7 @@ const Video = ({ props }) => {
             {/*Profile img */}
             <img
               src={userData.profile}
-              className="w-10 h-10 m-1 rounded-full"
+              className="w-10 h-10 aspect-square m-1 rounded-full"
             ></img>
             <div className="flex-col ml-2">
               <div className="video_title">

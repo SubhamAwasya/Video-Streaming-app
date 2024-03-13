@@ -60,49 +60,51 @@ function App() {
 
   return (
     <>
-      {/*Navbar///////////////////////////////////////////*/}
-      <NavBar
-        isSideBarOpen={isSideBarOpen}
-        setisSideBarOpen={setisSideBarOpen}
-        setleftMarginForContentPage={setleftMarginForContentPage}
-      />
-      {/*Navbar-------------------------------------------*/}
-      <div className="flex">
-        {/*Sidebar///////////////////////////////////////////*/}
-        <div
-          className={`bg-neutral-950 w-52 z-50 h-screen mt-14 p-4 fixed ${isSideBarOpen}`}
-        >
-          {pages.map((pageName, i) => renderNavLinks({ pageName, i }))}
+     
+        {/*Navbar///////////////////////////////////////////*/}
+        <NavBar
+          isSideBarOpen={isSideBarOpen}
+          setisSideBarOpen={setisSideBarOpen}
+          setleftMarginForContentPage={setleftMarginForContentPage}
+        />
+        {/*Navbar-------------------------------------------*/}
+        <div className="flex">
+          {/*Sidebar///////////////////////////////////////////*/}
+          <div
+            className={`bg-neutral-950 w-52 z-50 h-screen mt-14 p-4 fixed ${isSideBarOpen}`}
+          >
+            {pages.map((pageName, i) => renderNavLinks({ pageName, i }))}
 
-          {user ? (
-            <Link
-              to="/"
-              className="flex items-center hover:bg-neutral-800 rounded-lg p-1 pl-4 cursor-pointer"
-              onClick={() => {
-                toggleSideBar();
-                logOut();
-                pageName;
-              }}
-            >
-              <span className="material-symbols-outlined mr-2">logout</span>
-              {"LogOut"}
-            </Link>
-          ) : (
-            ""
-          )}
+            {user ? (
+              <Link
+                to="/"
+                className="flex items-center hover:bg-neutral-800 rounded-lg p-1 pl-4 cursor-pointer"
+                onClick={() => {
+                  toggleSideBar();
+                  logOut();
+                  pageName;
+                }}
+              >
+                <span className="material-symbols-outlined mr-2">logout</span>
+                {"LogOut"}
+              </Link>
+            ) : (
+              ""
+            )}
+          </div>
+
+          {/*Sidebar-------------------------------------------*/}
+          {/*Content Page ///////////////////////////////////////////*/}
+
+          <div
+            className={`${leftMarginForContentPage} w-full mx-auto justify-center mt-14 flex items-center`}
+          >
+            {<Outlet />}
+          </div>
+
+          {/*Content Page -------------------------------------------*/}
         </div>
-
-        {/*Sidebar-------------------------------------------*/}
-        {/*Content Page ///////////////////////////////////////////*/}
-
-        <div
-          className={`${leftMarginForContentPage} w-full mx-auto justify-center mt-14 flex items-center`}
-        >
-          {<Outlet />}
-        </div>
-
-        {/*Content Page -------------------------------------------*/}
-      </div>
+     
     </>
   );
 }

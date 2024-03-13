@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import UserProvider from "../context/user-context.jsx";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./main.css";
 import App from "./App.jsx";
 import HomePage from "./views/HomePage.jsx";
@@ -30,7 +30,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <UserProvider>
-    <RouterProvider router={router} />
-  </UserProvider>
+  <div>
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
+  </div>
 );

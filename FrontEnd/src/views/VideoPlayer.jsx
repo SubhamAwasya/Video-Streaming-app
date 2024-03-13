@@ -1,6 +1,7 @@
 import React from "react";
 import Video from "../components/Video.jsx";
 import Comment from "../components/Comment.jsx";
+import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user-context.jsx";
@@ -101,32 +102,38 @@ const VideoPlayer = () => {
   }, [useParams(), videoData.id, userData.user]);
 
   return (
-    <div className="flex mx-20 max-sm:mx-4 max-md:mx-10 my-4 ">
-      <div className="">
-        {/*Video Tage is hear*/}
+    <div className="flex mx-20 w-full wf max-sm:mx-4 max-md:mx-10 my-4 ">
+      <div className="w-full">
+        {/*Video Tage is hear-----------------------------------------------------------------------------------------------------------------------*/}
         <video
           id="videoPlayer"
-          className="-z-10 w-full max-w-6xl rounded-lg"
+          className="-z-10 w-full aspect-video rounded-lg"
           src={videoData.video}
           autoPlay
           controls
         ></video>
-        <div className="-z-10 w-full max-w-6xl rounded-lg p-2 h-16">
-          {/*title */}
+        <div className="-z-10 w-full rounded-lg p-2 h-16">
+          {/*title -----------------------------------------------------------------------------------------------------------------------*/}
           <div className="text-2xl mb-2">{videoData.title}</div>
           <div className="justify-between flex video_player-detail">
             <div className="flex items-center">
-              {/*User profile img*/}
-              <img
-                src={userData.profile}
-                className="ml-2 w-16 h-16 aspect-square rounded-full"
-              ></img>
+              {/*User profile img-----------------------------------------------------------------------------------------------------------------------*/}
+              <Link to={"/profile"}>
+                <img
+                  src={userData.profile}
+                  className="ml-2 w-16 h-16 aspect-square rounded-full"
+                ></img>
+              </Link>
               <div className="ml-2">
-                {/*user / channer name*/}
-                <div className="video_player-channel_name font-bold">
+                {/*user / channer name-----------------------------------------------------------------------------------------------------------------------*/}
+                <Link
+                  to={`/profile`}
+                  state={{ isOtherUserProfile: true, ...userData }}
+                  className="video_player-channel_name font-bold"
+                >
                   {userData.username}
-                </div>
-                {/*user subscribers*/}
+                </Link>
+                {/*user subscribers-----------------------------------------------------------------------------------------------------------------------*/}
                 <div className="text-sm opacity-50">12m subscribers</div>
                 <div className="text-sm opacity-50">
                   Views {videoData.views} 1h ago
@@ -153,7 +160,7 @@ const VideoPlayer = () => {
           </div>
           <hr className="m-4"></hr>
 
-          {/*input comments*/}
+          {/*input comments-----------------------------------------------------------------------------------------------------------------------*/}
           <div className="flex flex-col items-end">
             <textarea
               id="autoresize commentBox"
@@ -174,7 +181,7 @@ const VideoPlayer = () => {
               </button>
             )}
           </div>
-          {/*comments*/}
+          {/*comments-----------------------------------------------------------------------------------------------------------------------*/}
           <div className="video_comments_container mt-2">
             <span className="text-lg font-extrabold">Comments :</span>
             {comments.map((element, i) => {
@@ -183,7 +190,7 @@ const VideoPlayer = () => {
           </div>
         </div>
       </div>
-      {/*right video sudgestion*/}
+      {/*right video sudgestion-----------------------------------------------------------------------------------------------------------------------*/}
       <div className="flex-col w-full max-w-96 max-lg:hidden px-10 h-screen">
         {relatedVidos.map((video, i) => {
           return <Video key={i} props={video} />;
